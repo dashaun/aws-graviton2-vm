@@ -1,0 +1,30 @@
+#cloud-config
+repo_update: true
+repo_upgrade: all
+
+# Required packages
+packages:
+  - curl
+  - zip
+  - git
+  - gcc
+  - glibc-devel
+  - zlib-devel
+
+# Commands to run
+runcmd:
+  - su -l ec2-user -c "curl -s 'https://get.sdkman.io' | bash"
+  - su -l ec2-user -c "source '$HOME/.sdkman/bin/sdkman-init.sh'"
+  - su -l ec2-user -c "sdk install java 22.1.0.r17-grl"
+  - su -l ec2-user -c "sdk install springboot"
+  - su -l ec2-user -c "git config --global init.defaultBranch main"
+  - su -l ec2-user -c "git clone https://github.com/dashaun/initializr-plusplus.git"
+  - su -l ec2-user -c "cd $HOME/initializer-plusplus && ./mvnw -Pnative package -DskipTests"
+  - curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
+  - unzip awscliv2.zip
+  - ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  - sudo amazon-linux-extras enable epel
+  - sudo yum install epel-release -y
+  - sudo yum install httpie -y
+  - sudo yum update -y
+  - su -l ec2-user -c "touch $HOME/CLOUD_INIT_COMPLETE"

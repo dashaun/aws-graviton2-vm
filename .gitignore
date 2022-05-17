@@ -1,0 +1,6 @@
+.idea
+.envrc
+terraform.tfvars
+.terraform*
+terraform.tfstate*
+privateKey
